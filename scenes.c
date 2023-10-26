@@ -10,7 +10,14 @@ static DDATestScene* createDDATestScene(
     SDL_Renderer* renderer
 );
 static void destroyDDATestScene(DDATestScene* scene);
-void updateDDATestScene(Scene** scene_ptr, float deltaTime);
+static void updateDDATestScene(Scene** scene_ptr, float deltaTime);
+
+static UITestScene* createUITestScene(
+        SDL_Window* window,
+        SDL_Renderer* renderer
+);
+static void destroyUITestScene(UITestScene* scene);
+static void updateUITestScene(Scene** scene_ptr, float deltaTime);
 
 Scene* createScene(
     enum SceneType type,
@@ -19,7 +26,9 @@ Scene* createScene(
 ) {
     switch (type) {
         case DDA_TEST_SCENE:
-            return (Scene *) createDDATestScene(window, renderer);
+            return (Scene*) createDDATestScene(window, renderer);
+        case UI_TEST_SCENE:
+            return (Scene*) createUITestScene(window, renderer);
     }
 
     return NULL;
@@ -30,6 +39,9 @@ void updateScene(Scene** scene, float deltaTime) {
         case DDA_TEST_SCENE:
             updateDDATestScene(scene, deltaTime);
             break;
+        case UI_TEST_SCENE:
+            updateUITestScene(scene, deltaTime);
+            break;
     }
 }
 
@@ -37,6 +49,9 @@ void destroyScene(Scene* scene) {
     switch (scene->type) {
         case DDA_TEST_SCENE:
             destroyDDATestScene((DDATestScene*) scene);
+            break;
+        case UI_TEST_SCENE:
+            destroyUITestScene((UITestScene*) scene);
             break;
     }
 }
@@ -86,3 +101,31 @@ void updateDDATestScene(Scene** scene_ptr, float deltaTime) {
     updatePlayer(&scene->player, &deltaTime);
 }
 
+UITestScene* createUITestScene(
+        SDL_Window* window,
+        SDL_Renderer* renderer
+) {
+    UITestScene* scene = (UITestScene*)malloc(sizeof(UITestScene));
+    scene->type = UI_TEST_SCENE;
+    scene->window = window;
+    scene->renderer = renderer;
+
+    vec2f titlePosition = {100.f, 100.f};
+    scene->title = createLabel(
+            scene->renderer,
+            titlePosition,
+            "bam bam bim bim",
+            72, WHITE
+            );
+
+    return scene;
+}
+
+void destroyUITestScene(UITestScene* scene) {
+    free(scene);
+}
+
+void updateUITestScene(Scene** scene_ptr, float deltaTime) {
+    UITestScene* scene = (UITestScene*)(*scene_ptr);
+    renderLabel(scene->title);
+}

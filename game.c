@@ -28,6 +28,10 @@ Game* createGame() {
         fprintf(stderr, "Error initializing SDL2: %s", SDL_GetError());
         return NULL;
     }
+    if (TTF_Init() < 0) {
+        fprintf(stderr, "Failed to initialize SDL_TTF: %s\n", TTF_GetError());
+        return NULL;
+    }
 
     Game* game = (Game*)malloc(sizeof(Game));
     game->window = SDL_CreateWindow(
@@ -50,7 +54,7 @@ Game* createGame() {
     }
 
     game->running = true;
-    game->currentScene = createScene(DDA_TEST_SCENE, game->window, game->renderer);
+    game->currentScene = createScene(UI_TEST_SCENE, game->window, game->renderer);
 
     return game;
 }

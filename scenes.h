@@ -16,8 +16,11 @@
 #include "dda/map.h"
 #include "dda/player.h"
 
+#include "ui/ui.h"
+
 enum SceneType {
-    DDA_TEST_SCENE // DDATestScene
+    DDA_TEST_SCENE, // DDATestScene
+    UI_TEST_SCENE // UITestScene
 };
 
 // base structure (used for "polymorphism")
@@ -35,6 +38,7 @@ Scene* createScene(
 void updateScene(Scene** scene, float deltaTime);
 void destroyScene(Scene* scene);
 
+// defining each scene
 typedef struct {
     enum SceneType type;
     SDL_Window* window;
@@ -44,5 +48,13 @@ typedef struct {
     Player player;
     Minimap minimap;
 } DDATestScene;
+
+typedef struct {
+    enum SceneType type;
+    SDL_Window* window;
+    SDL_Renderer* renderer;
+
+    Label* title;
+} UITestScene;
 
 #endif //FPSEVO_SCENES_H
