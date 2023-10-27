@@ -10,8 +10,10 @@
 #include <SDL2/SDL_ttf.h>
 #include "fonts.h"
 #include "../utils/mymath.h"
+#include "../scenes.h"
 
 typedef struct {
+    Scene** scene_ptr;
     vec2f position;
     char* text;
     int fontSize;
@@ -25,6 +27,7 @@ typedef struct {
 
 Label* createLabel(
     SDL_Renderer* renderer,
+    Scene** scene_ptr,
     vec2f position,
     const char* text,
     int fontSize,

@@ -113,6 +113,7 @@ UITestScene* createUITestScene(
     vec2f titlePosition = {100.f, 100.f};
     scene->title = createLabel(
             scene->renderer,
+            &scene,
             titlePosition,
             "bam bam bim bim",
             72, WHITE

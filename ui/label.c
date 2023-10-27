@@ -9,12 +9,14 @@
 
 Label* createLabel(
         SDL_Renderer* renderer,
+        Scene** scene_ptr,
         vec2f position,
         const char* text,
         int fontSize,
         SDL_Color color
 ) {
     Label* label = (Label*)malloc(sizeof(Label));
+    label->scene_ptr = scene_ptr;
     label->position = position;
     size_t textSize = strlen(text);
     label->text = (char*)malloc(sizeof(char) * textSize);

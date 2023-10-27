@@ -17,5 +17,7 @@ add_executable(fpsevo main.c
         ui/fonts.h
         ui/ui.h
         ui/color.h
+        ui/button.c
+        ui/button.h
 )
 target_link_libraries(fpsevo SDL2 SDL2_gfx SDL2_ttf m)
