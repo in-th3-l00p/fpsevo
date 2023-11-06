@@ -23,19 +23,26 @@
 
 typedef struct {
     uint32_t width, height, wallSize;
-    uint8_t** map;
+    uint8_t **map;
 } Map;
 
-Map* createTestMap();
-void destroyMap(Map* map);
+Map *createTestMap();
+
+void destroyMap(Map *map);
 
 // holds the data needed for showing a minimap of the game
 typedef struct {
-    Map* map;
-    Player* player;
+    Map *map;
+    Player *player;
     double ratio;
 
-    SDL_Renderer* renderer;
+    SDL_Renderer *renderer;
 } Minimap;
 
-void renderMinimap(Minimap* minimap);
+void renderMap(Minimap *minimap);
+
+void renderMinimap(Minimap *minimap);
+
+void renderDDARays(Minimap *minimap);
+
+void renderPlayer(Minimap *minimap);

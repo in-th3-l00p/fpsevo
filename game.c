@@ -17,13 +17,10 @@
  */
 
 #include "game.h"
+#include "config.h"
 #include <stdlib.h>
 
-#define WINDOW_TITLE "Raycaster"
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 720
-
-Game* createGame() {
+Game *createGame() {
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         fprintf(stderr, "Error initializing SDL2: %s", SDL_GetError());
         return NULL;
@@ -33,7 +30,7 @@ Game* createGame() {
         return NULL;
     }
 
-    Game* game = (Game*)malloc(sizeof(Game));
+    Game *game = (Game *) malloc(sizeof(Game));
     game->window = SDL_CreateWindow(
             WINDOW_TITLE,
             SDL_WINDOWPOS_CENTERED,
@@ -54,14 +51,18 @@ Game* createGame() {
     }
 
     game->running = true;
-    game->currentScene = createScene(UI_TEST_SCENE, game->window, game->renderer);
+    game->currentScene = createScene(DDA_TEST_SCENE, game->window, game->renderer);
 
     return game;
 }
 
-void runGame(Game* game) {
+void runGame(Game *game) {
     SDL_Event event; // event holding structure
-    float deltaTime = 0.1;
+
+    uint64_t now = SDL_GetPerformanceCounter();
+    uint64_t last = 0;
+    float deltaTime = 0;
+
     while (game->running) {
         while (SDL_PollEvent(&event))
             switch (event.type) {
@@ -70,18 +71,22 @@ void runGame(Game* game) {
                     break;
             }
 
+        last = now;
+        now = SDL_GetPerformanceCounter();
+        deltaTime = (float) ((now - last) * 1000 / (float) SDL_GetPerformanceFrequency());
+
         // clear
-        SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
+        SDL_SetRenderDrawColor(game->renderer, 69, 69, 69, 255);
         SDL_RenderClear(game->renderer);
 
         updateScene(&game->currentScene, deltaTime);
 
         // update
-        SDL_RenderPresent(game->renderer); 
+        SDL_RenderPresent(game->renderer);
     }
 }
 
-void destroyGame(Game* game) {
+void destroyGame(Game *game) {
     destroyScene(game->currentScene);
     SDL_DestroyRenderer(game->renderer);
     SDL_DestroyWindow(game->window);

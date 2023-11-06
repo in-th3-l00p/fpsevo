@@ -26,17 +26,19 @@ enum SceneType {
 // base structure (used for "polymorphism")
 typedef struct Scene {
     enum SceneType type; // somewhat of a scene id (used for destroying)
-    SDL_Window* window;
-    SDL_Renderer* renderer;
+    SDL_Window *window;
+    SDL_Renderer *renderer;
 } Scene;
 
-Scene* createScene(
-    enum SceneType type,
-    SDL_Window* window,
-    SDL_Renderer* renderer
+Scene *createScene(
+        enum SceneType type,
+        SDL_Window *window,
+        SDL_Renderer *renderer
 );
-void updateScene(Scene** scene, float deltaTime);
-void destroyScene(Scene* scene);
+
+void updateScene(Scene **scene, float deltaTime);
+
+void destroyScene(Scene *scene);
 
 // defining each scene
 typedef struct {
@@ -44,15 +46,15 @@ typedef struct {
     SDL_Window* window;
     SDL_Renderer* renderer;
 
-    Map* map;
+    Map *map;
     Player player;
     Minimap minimap;
 } DDATestScene;
 
 typedef struct {
     enum SceneType type;
-    SDL_Window* window;
-    SDL_Renderer* renderer;
+    SDL_Window *window;
+    SDL_Renderer *renderer;
 
     Label* title;
 } UITestScene;

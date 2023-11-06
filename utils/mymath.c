@@ -19,25 +19,30 @@
 #include "mymath.h"
 #include <stdlib.h>
 
-float getAngleVec2f(vec2f vec) { 
-    return atan2(vec.y, vec.x); 
+float getAngleVec2f(vec2f vec) {
+    return atan2(vec.y, vec.x);
 }
 
-vec2f fromAngleVec2f(float angle) { 
-    vec2f vec = { cos(angle), sin(angle) }; 
+vec2f fromAngleVec2f(float angle) {
+    vec2f vec = {cos(angle), sin(angle)};
     return vec;
 }
 
-float magnitudeVec2f(vec2f vec) { 
-    return sqrt(vec.x * vec.x + vec.y * vec.y); 
+float magnitudeVec2f(vec2f vec) {
+    return sqrt(vec.x * vec.x + vec.y * vec.y);
 }
 
-vec2f rotateVec2f(vec2f vec, float angle) { 
-    float sina = sin(angle), cosa = cos(angle); 
-    vec2f rvec = { 
-        vec.x * cosa - vec.y * sina, 
-        vec.x * sina + vec.y * cosa 
+vec2f rotateVec2f(vec2f vec, float angle) {
+    float sina = sin(angle), cosa = cos(angle);
+    vec2f rvec = {
+            vec.x * cosa - vec.y * sina,
+            vec.x * sina + vec.y * cosa
     };
     return rvec;
 }
 
+vec2f mirrorVec2f(vec2f vec) {
+    float angle = getAngleVec2f(vec);
+    angle = angle > 0 ? M_PI - angle : -M_PI - angle;
+    return fromAngleVec2f(angle);
+}

@@ -17,23 +17,41 @@
  */
 
 #include "player.h"
+#include "../config.h"
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 
-const float PLAYER_SPEED = 0.5;
-const float ROTATE_SPEED = DEG2RAD(5);
-
-void updatePlayer(Player* player, float* deltaTime) {
+void updatePlayer(Player *player, float *deltaTime, uint8_t **map,
+                  uint32_t wallSize) {
     SDL_PumpEvents();
-    const uint8_t* keys = SDL_GetKeyboardState(NULL);
-    vec2i input = {
-        (int)keys[SDL_SCANCODE_D] - (int)keys[SDL_SCANCODE_A],
-        (int)keys[SDL_SCANCODE_W] - (int)keys[SDL_SCANCODE_S],
+
+    const uint8_t *keys = SDL_GetKeyboardState(NULL);
+    vec2d input = {
+            (int) keys[SDL_SCANCODE_A] - (int) keys[SDL_SCANCODE_D],
+            (int) keys[SDL_SCANCODE_W] - (int) keys[SDL_SCANCODE_S],
     };
 
     player->direction = rotateVec2f(
             player->direction, ROTATE_SPEED * input.x * (*deltaTime)
     );
-    player->position.x += PLAYER_SPEED * input.y * player->direction.x;
-    player->position.y += PLAYER_SPEED * input.y * player->direction.y;
+
+    vec2f newPosition = {
+            player->position.x + PLAYER_SPEED * input.y * player->direction.x * (*deltaTime),
+            player->position.y + PLAYER_SPEED * input.y * player->direction.y * (*deltaTime)
+    };
+
+    if (map[(int) (newPosition.y / wallSize)][(int) (newPosition.x / wallSize)] == 0) {
+        player->position = newPosition;
+    } else {
+        newPosition.x = player->position.x + PLAYER_SPEED * input.y * player->direction.x * (*deltaTime);
+        newPosition.y = player->position.y;
+        if (map[(int) (newPosition.y / wallSize)][(int) (newPosition.x / wallSize)] == 0) {
+            player->position = newPosition;
+        }
+        newPosition.x = player->position.x;
+        newPosition.y = player->position.y + PLAYER_SPEED * input.y * player->direction.y * (*deltaTime);
+        if (map[(int) (newPosition.y / wallSize)][(int) (newPosition.x / wallSize)] == 0) {
+            player->position = newPosition;
+        }
+    }
 }

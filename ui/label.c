@@ -7,18 +7,18 @@
 #include <string.h>
 #include <stdio.h>
 
-Label* createLabel(
-        SDL_Renderer* renderer,
+Label *createLabel(
+        SDL_Renderer *renderer,
         vec2f position,
-        const char* text,
+        const char *text,
         int fontSize,
         SDL_Color color
 ) {
-    Label* label = (Label*)malloc(sizeof(Label));
+    Label *label = (Label *) malloc(sizeof(Label));
     label->position = position;
     size_t textSize = strlen(text);
-    label->text = (char*)malloc(sizeof(char) * textSize);
-    strncpy(label->text, text, textSize * sizeof(char));
+    label->text = (char *) malloc(sizeof(char) * textSize);
+    strncpy(label->text, text, textSize * sizeof(char) + 1);
     label->fontSize = fontSize;
     label->color = color;
     label->renderer = renderer;
@@ -29,7 +29,7 @@ Label* createLabel(
         return NULL;
     }
 
-    SDL_Surface* textSurface = TTF_RenderText_Solid(label->currentFont, label->text, label->color);
+    SDL_Surface *textSurface = TTF_RenderText_Solid(label->currentFont, label->text, label->color);
     if (textSurface == NULL) {
         fprintf(stderr, "Failed to create text surface: %s\n", TTF_GetError());
         return NULL;
@@ -48,31 +48,31 @@ Label* createLabel(
     return label;
 }
 
-void destoryLabel(Label* label) {
+void destoryLabel(Label *label) {
     free(label->text);
     TTF_CloseFont(label->currentFont);
     SDL_DestroyTexture(label->currentTexture);
     free(label);
 }
 
-void renderLabel(Label* label) {
+void renderLabel(Label *label) {
     SDL_FRect rectangle = {
-        label->position.x, label->position.y,
-        label->size.x, label->size.y
+            label->position.x, label->position.y,
+            label->size.x, label->size.y
     };
     SDL_RenderCopyF(label->renderer, label->currentTexture, NULL, &rectangle);
 }
 
-void labelSetPosition(Label* label, vec2f position) {
+void labelSetPosition(Label *label, vec2f position) {
     label->position = position;
 }
 
-void labelSetText(Label* label, const char* text) {
+void labelSetText(Label *label, const char *text) {
     size_t textSize = strlen(text);
-    label->text = (char*)malloc(sizeof(char) * textSize);
+    label->text = (char *) malloc(sizeof(char) * textSize);
     strncpy(label->text, text, textSize * sizeof(char));
 
-    SDL_Surface* textSurface = TTF_RenderText_Solid(label->currentFont, label->text, label->color);
+    SDL_Surface *textSurface = TTF_RenderText_Solid(label->currentFont, label->text, label->color);
     if (textSurface == NULL) {
         fprintf(stderr, "Failed to create text surface: %s\n", TTF_GetError());
         return;
@@ -87,7 +87,7 @@ void labelSetText(Label* label, const char* text) {
     SDL_FreeSurface(textSurface);
 }
 
-void labelSetFontSize(Label* label, int fontSize) {
+void labelSetFontSize(Label *label, int fontSize) {
     label->fontSize = fontSize;
     label->currentFont = TTF_OpenFont(DEFAULT_FONT, label->fontSize);
     if (label->currentFont == NULL) {
@@ -95,7 +95,7 @@ void labelSetFontSize(Label* label, int fontSize) {
         return;
     }
 
-    SDL_Surface* textSurface = TTF_RenderText_Solid(label->currentFont, label->text, label->color);
+    SDL_Surface *textSurface = TTF_RenderText_Solid(label->currentFont, label->text, label->color);
     if (textSurface == NULL) {
         fprintf(stderr, "Failed to create text surface: %s\n", TTF_GetError());
         return;
@@ -110,9 +110,9 @@ void labelSetFontSize(Label* label, int fontSize) {
     SDL_FreeSurface(textSurface);
 }
 
-void labelSetColor(Label* label, SDL_Color color) {
+void labelSetColor(Label *label, SDL_Color color) {
     label->color = color;
-    SDL_Surface* textSurface = TTF_RenderText_Solid(label->currentFont, label->text, label->color);
+    SDL_Surface *textSurface = TTF_RenderText_Solid(label->currentFont, label->text, label->color);
     if (textSurface == NULL) {
         fprintf(stderr, "Failed to create text surface: %s\n", TTF_GetError());
         return;

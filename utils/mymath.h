@@ -27,12 +27,24 @@
 #define RAD2DEG(a) a * 180 / M_PI
 
 // vectors
-typedef struct { int x, y; } vec2i;
-typedef struct { float x, y; } vec2f;
+typedef struct {
+    int x, y;
+} vec2d;
+typedef struct {
+    float x, y;
+} vec2f;
+typedef struct {
+    int x, y, z;
+} vec3d;
 
 float getAngleVec2f(vec2f vec);
+
 vec2f fromAngleVec2f(float angle);
+
 float magnitudeVec2f(vec2f vec);
+
 vec2f rotateVec2f(vec2f vec, float angle);
+
+vec2f mirrorVec2f(vec2f vec);
 
 #endif
